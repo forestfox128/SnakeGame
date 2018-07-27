@@ -1,0 +1,11 @@
+*{box-sizing:border-box}
+
+#container{
+    margin:1em auto 1em auto;
+    width:100%;
+}
+canvas{
+    display: block;
+    margin: 0 auto;
+    background: #000;
+}
