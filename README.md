@@ -11,8 +11,8 @@ A simple snake game.
 ## Technology stack 
 
 Name |
-| :--: | :---: |
-| [HTML]|
-| [JavaScript]|
-| [CSS]|
+| :--: |
+| HTML|
+| JavaScript|
+| CSS|
 	
