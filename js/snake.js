@@ -4,14 +4,14 @@ var ctx;
 var snakeDots;
 var inGame = true;
 
-var leftDirect = true;
-var rightDirect = false;
+var leftDirect = false;
+var rightDirect = true;
 var upDirect = false;
 var downDirect = false;
 
 const DELAY = 120;
-const canvasWidth = 400;
-const canvasHeight = 400;
+const canvasWidth = 600;
+const canvasHeight = 600;
 const moveSize = 10;
 const leftKey = 37;
 const rightKey = 39;
@@ -22,65 +22,82 @@ const downKey = 40;
 var X = [];
 var Y = [];
 
+//apple coordinates
+var gX, gY;
+var cX, cY;
+
 var head;
 var tail;
-var img;
+var apple;
+var cherry;
 
-window.onload = function(){
-    init();
-}
+var score = 0;
+var appleScore = 0, cherryScore = 0;
+var t0,t1;
+
+// window.onload = function(){
+//     init();
+// }
 var init = function(){
      canvas = document.getElementById('canvas');
      ctx = canvas.getContext('2d');
-
-     head = new Image();
-     head.onload = function(){
-        ctx.drawImage(head,0,0);
-     }
-    head.src = "img/head.png";
-
+    inGame = true;
+    
      loadImg();
      createSnake();
+     locateapple();
+     locateCherry();
+     updatePanel();
+     t0 = performance.now();
      setTimeout("gameCycle()", DELAY);
     
 }
-
-
 
 var loadImg = function(){
 
     head = new Image();
     head.src = "img/head.png";
 
-     tail = new Image();
-     tail.src = "img/tail.png";
+    tail = new Image();
+    tail.src = "img/tail.png";
+
+    apple = new Image();
+    apple.src = "img/apple.png";
+
+    cherry = new Image();
+    cherry.src = "img/cherry.png";
 }
 
 var createSnake = function(){
 
     snakeDots = 3;
 
-    for(var i = 0; i < snakeDots; i++){
-        X[i] = 100 - i*10;
-        Y[i] = 100;
+    X[0] = 50;
+    Y[0] = 50;
+    for(var i = 1; i < snakeDots; i++){
+        X[i] = 50 - i*16;
+        Y[i] = 58;
     }
 }
 
 var drawOnCanvas = function(){
 
     ctx.clearRect(0,0,canvasWidth,canvasHeight);
-    console.log(inGame);
     if(inGame){
 
         for(var i = 0; i < snakeDots; i++){
             if(i == 0){
                 
                 ctx.drawImage(head,X[i],Y[i]);
+                
             }
             else{
                 ctx.drawImage(tail,X[i],Y[i]);
             }
         }
+        console.log(gX+" : "+gY);
+        ctx.drawImage(apple,gX,gY);
+        ctx.drawImage(cherry,cX,cY);
     }
     else{
         gameOver();
@@ -92,17 +109,19 @@ var gameOver = function(){
     ctx.fillStyle = 'white';
     ctx.textBaseline = 'middle'; 
     ctx.textAlign = 'center'; 
-    ctx.font = 'normal bold 18px serif';
+    ctx.font = "45px 'Hanalei Fill', cursive";
     
-    ctx.fillText('Game over', canvasWidth/2, canvasHeight/2);
+    ctx.fillText('Game over!!!', canvasWidth/2, canvasHeight/2);
 }
 
 var move = function(){
 
-    for(var i = snakeDots; i > 0; i--){
+    for(var i = snakeDots; i > 1; i--){
         X[i] = X[i-1];
         Y[i] = Y[i-1];
     }
+    X[1] = X[0] - 2;
+    Y[1] = Y[0] + 8;
 
     if(leftDirect){
 
@@ -122,7 +141,45 @@ var move = function(){
     }
 }
 
+var locateapple = function(){
 
+    var x = Math.floor(Math.random()*3.8);
+    gX = x * snakeDots *10 +10;
+
+    x = Math.floor(Math.random()*3.8);
+    gY = x *snakeDots *10 +10;
+}
+
+var locateCherry = function(){
+
+    var x = Math.floor(Math.random()*3.8);
+    cX = x *10 +10;
+
+    x = Math.floor(Math.random()*3.8);
+    cY = x *10 +10;
+}
+
+var checkapple = function(){
+    console.log("x: "+X[0]+" y: "+Y[0]+" gx: "+gX+ " gY: "+ gY);    
+    if((X[0] == gX) && (Y[0] == gY)){
+        console.log("Caught");
+        snakeDots++;
+        score++;
+        appleScore++;
+        locateapple();
+    }
+}
+
+var checkCherry = function(){
+       
+    if((X[0] == cX) && (Y[0] == cY)){
+        console.log("Caught");
+        snakeDots+=2;
+        score+=2;
+        cherryScore++;
+        locateCherry();
+    }
+}
 
 var checkCollision = function() {
 
@@ -154,13 +211,24 @@ var checkCollision = function() {
     }
 };
 
+var updatePanel = function(){
+    document.getElementById("generalScore").innerHTML = score;
+    t1 = performance.now();
+    document.getElementById("time").innerHTML = (t1 - t0)/1000 +" seconds";
+    document.getElementById("applesScore").innerHTML = appleScore;
+    document.getElementById("cherriessScore").innerHTML = cherryScore;
+}
+
 var gameCycle = function(){
 
     if(inGame){
         
         move();
         checkCollision();
+        checkapple();
+        checkCherry();
         drawOnCanvas();
+        updatePanel();
         setTimeout("gameCycle()", DELAY);
     }
 }
@@ -175,6 +243,7 @@ onkeydown = function(e){
         leftDirect = true;
         upDirect = false;
         downDirect = false;
+
     }
     if(key == rightKey && !leftDirect){
         rightDirect = true;

@@ -1,11 +1,82 @@
 *{box-sizing:border-box}
 
+body{background-image:url("snakeBack.png");}
+
 #container{
     margin:1em auto 1em auto;
+    margin-top: 3%;
     width:100%;
+    
 }
+
+.row:after{
+    content: "";
+    clear: both;
+    display: table;
+  }
 canvas{
     display: block;
     margin: 0 auto;
+    border: 5px solid #003300;
     background: #000;
+}
+.ref{
+    font-size: 10px;
+}
+
+.grid-1-3{
+    font-size:2em;
+    font-style: oblique;
+    font-weight: bold;
+    font-family: 'Hanalei Fill', cursive;
+    width:100%;
+    float:left;
+    margin-bottom: 1%;
+}
+
+#scorePanel{
+    border: 5px solid #003300; 
+    
+    background: #eee;
+}
+#gameHeader{
+    text-align: center;
+    font-size: 4em;
+    padding: 0.5em;
+    font-family: 'Hanalei Fill', cursive;
+}
+.button{
+    margin:1%;
+    font-family: 'Hanalei Fill', cursive;
+    font-size: 2em;
+    text-align: center;
+    border: 5px solid #003300;
+    cursor: pointer;
+    background: #eee;
+    float: left;
+}
+.button:hover{
+    background: #54ad00;
+}
+footer{
+    float:left;
+    text-align: center;
+    width:100%;
+    margin-top: 2%;
+}
+
+@media screen and (min-width: 1300px) {
+    [class*='grid-']{
+        text-align: center;
+         width: 50%;
+    }
+
+    #scorePanel{
+        margin: 0 5em 0 0 ;
+    }
+
+    #gameHeader{
+        text-align: left;
+        padding-left: 3.3em;
+    }
 }
