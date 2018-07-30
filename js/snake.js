@@ -25,8 +25,8 @@ var Y = [];
 //apple coordinates
 var gX, gY;
 var cX, cY;
-
 var head;
+var headL,headR,headD,headU;
 var tail;
 var apple;
 var cherry;
@@ -55,8 +55,16 @@ var init = function(){
 
 var loadImg = function(){
 
-    head = new Image();
-    head.src = "img/head.png";
+    headL = new Image();
+    headL.src = "img/headL.png";
+    headR = new Image();
+    headR.src = "img/headR.png";
+    headU = new Image();
+    headU.src = "img/headU.png";
+    headD = new Image();
+    headD.src = "img/headD.png";
+
+    head = headL;
 
     tail = new Image();
     tail.src = "img/tail.png";
@@ -120,43 +128,46 @@ var move = function(){
         X[i] = X[i-1];
         Y[i] = Y[i-1];
     }
-    X[1] = X[0] - 2;
+    X[1] = X[0] - 8;
     Y[1] = Y[0] + 8;
 
     if(leftDirect){
-
+        X[1] = X[0] + 18;
+        Y[1] = Y[0] + 8;
         X[0] -= moveSize;
     }
     if(rightDirect){
-
+        
         X[0] += moveSize;
     }
     if(upDirect){
-
+        Y[1] = Y[0] + 18;
+        X[1] = X[0] + 8;
         Y[0] -= moveSize;
     }
     if(downDirect){
-
+        Y[1] = Y[0] - 8;
+        X[1] = X[0] + 8;
         Y[0] += moveSize;
     }
 }
 
 var locateapple = function(){
 
-    var x = Math.floor(Math.random()*3.8);
-    gX = x * snakeDots *10 +10;
+    var x = Math.floor(Math.random()*5.8);
+    gX = x *100 +10;
 
-    x = Math.floor(Math.random()*3.8);
-    gY = x *snakeDots *10 +10;
+    x = Math.floor(Math.random()*5.8);
+    gY = x *100 +10;
 }
 
 var locateCherry = function(){
 
-    var x = Math.floor(Math.random()*3.8);
-    cX = x *10 +10;
+    var x = Math.floor(Math.random()*5.8);
+    cX = x *100 +10;
 
-    x = Math.floor(Math.random()*3.8);
-    cY = x *10 +10;
+    x = Math.floor(Math.random()*5.8);
+    cY = x *100 +10;
 }
 
 var checkapple = function(){
@@ -243,21 +254,25 @@ onkeydown = function(e){
         leftDirect = true;
         upDirect = false;
         downDirect = false;
+        head = headR;
 
     }
     if(key == rightKey && !leftDirect){
         rightDirect = true;
         upDirect = false;
         downDirect = false;
+        head = headL;
     }
     if(key == upKey && !downDirect){
         upDirect = true;
         leftDirect = false;
         rightDirect = false;
+        head = headU;
     }
     if(key == downKey && !upDirect){
         downDirect = true;
         leftDirect = false;
         rightDirect = false;
+        head = headD;
     }
 }
