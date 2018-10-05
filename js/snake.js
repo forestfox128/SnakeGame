@@ -22,6 +22,20 @@ const downKey = 40;
 var X = [];
 var Y = [];
 
+var boardArray = new Array(37,37);
+var xCoor = 0;
+var yCoor = 0;
+var counter = 0;
+for(var x = 0; x < 37; x++){
+    yCoor = 0;
+    for(var y = 0; y < 37; y++){
+        boardArray[x][y] = counter;
+        yCoor += 16;
+        counter++;
+    }
+    xCoor += 16;
+}
+
 //apple coordinates
 var gX, gY;
 var cX, cY;
@@ -55,16 +69,9 @@ var init = function(){
 
 var loadImg = function(){
 
-    headL = new Image();
-    headL.src = "img/headL.png";
-    headR = new Image();
-    headR.src = "img/headR.png";
-    headU = new Image();
-    headU.src = "img/headU.png";
-    headD = new Image();
-    headD.src = "img/headD.png";
-
-    head = headL;
+    head = new Image();
+    head.src = "img/head.png";
+    
 
     tail = new Image();
     tail.src = "img/tail.png";
@@ -124,16 +131,11 @@ var gameOver = function(){
 
 var move = function(){
 
-    for(var i = snakeDots; i > 1; i--){
+    for(var i = snakeDots; i >= 1; i--){
         X[i] = X[i-1];
         Y[i] = Y[i-1];
     }
-    X[1] = X[0] - 8;
-    Y[1] = Y[0] + 8;
-
     if(leftDirect){
-        X[1] = X[0] + 18;
-        Y[1] = Y[0] + 8;
         X[0] -= moveSize;
     }
     if(rightDirect){
@@ -141,13 +143,9 @@ var move = function(){
         X[0] += moveSize;
     }
     if(upDirect){
-        Y[1] = Y[0] + 18;
-        X[1] = X[0] + 8;
         Y[0] -= moveSize;
     }
     if(downDirect){
-        Y[1] = Y[0] - 8;
-        X[1] = X[0] + 8;
         Y[0] += moveSize;
     }
 }
